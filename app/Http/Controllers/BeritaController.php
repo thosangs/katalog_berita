@@ -75,8 +75,9 @@ class BeritaController extends Controller
         $query = Berita::select('tag', 'sumber', 'tanggal', 'judul', 'link')->orderBy('tanggal', 'DESC');
         return datatables($query)
             ->editColumn('judul', function ($berita) {
-                return '<img src="'.getIcon($berita->sumber).'" style="width:15px">'.
-                '<a style="font-weight:650;text-decoration:none;color:black;" href="'.$berita->link.'"> '.$berita->judul.' </a>'.getDateFormat($berita->tanggal);
+                return
+                '<p style="margin-bottom:0;"><img src="'.getIcon($berita->sumber).'" style="width:13px">'.$berita->tag.' :'.getDateFormat($berita->tanggal).'</p>'.
+                '<a style="font-weight:650;text-decoration:none;color:black;" href="'.$berita->link.'"  target="_blank"> '.$berita->judul.' </a>';
             })
             ->escapeColumns([])
             ->make(true);
