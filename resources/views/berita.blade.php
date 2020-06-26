@@ -60,9 +60,7 @@
           </tbody>
         </table>
       </div>
-      
     </div>
-    
   </main>
   <footer>
     <b>
@@ -92,6 +90,9 @@
   @media only screen and (max-width: 600px) {
     body {
       background-color: lightblue;
+    }
+    .container{
+      margin-bottom: 15%;
     }
   }
   .searchPanel{
