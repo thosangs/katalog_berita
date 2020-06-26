@@ -22,20 +22,30 @@
 <body>
   <main class="container">
     <div class="row">
-      <div class="col-12 col-sm-6 my-auto searchPanel">
+      <div class="col-12 col-lg-6 my-auto searchPanel">
         <h1 style="margin-bottom: 0;">📰[<b>AKTRIS</b>]</h1>
         <div style="margin-bottom: 3%;">Aplikasi Katalog Berita Statistik</div>
         <input type="text" name="searchKey" class="form-control form-control-lg" id="searchKey" placeholder="🔎Cari berita disini...">
-        {{-- <div class="searchDate input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="">Tanggal</span>
+        <div class="advanced hidden">
+          <div class="searchDate input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="">Rentang</span>
+            </div>
+            <input type="date" class="form-control" id="dari" name="dari" min="2020-01-01" value="2020-01-01">
+            <input type="date" class="form-control" id="hingga" name="hingga" min="2020-01-01">
           </div>
-          <input type="date" class="form-control" placeholder="mulai dari">
-          <input type="date" class="form-control" placeholder="hingga">
+          <select class="form-control" id="sumberBerita">
+            <option value="*">Semua Sumber</option>
+
+            @foreach($render as $key => $result)
+            {!!html_entity_decode($result)!!}
+            @endforeach
+
+          </select>
         </div>
-        <div class="advancedSearchAnchor">Pencarian Lewat Tanggal</div> --}}
+        <div class="advancedSearchAnchor">Pencarian Lanjutan</div>
       </div>
-      <div class="col-12 col-sm-6 tablePanel">
+      <div class="col-12 col-lg-6 tablePanel">
         <table class="table table-striped" id="datatable">
           <thead>
             <tr>
@@ -54,12 +64,13 @@
     </div>
     
   </main>
-  <footer><b>
+  <footer>
+    <b>
       <script>
       document.write(new Date().getFullYear())
       </script> © Made by <a href="https://github.com/blankon123/"> blankon123 </a> with 💔
+    </b>
   </footer>
-  </b>
 </body>
 
 <style>
@@ -74,8 +85,14 @@
     border-radius: 20px;       /* roundness of the scroll thumb */
   }
   .container{
-    margin-top: 5%;
+    margin-top: 2%;
     background: rgb(255,255,255);
+  }
+
+  @media only screen and (max-width: 600px) {
+    body {
+      background-color: lightblue;
+    }
   }
   .searchPanel{
     text-align: center;
@@ -85,7 +102,7 @@
     filter: grayscale(1);
   }
 
-  #searchKey{
+  #searchKey,.searchDate{
     margin-bottom: 1%;
   }
 
@@ -110,29 +127,51 @@
   main{
     padding:2%;
     background-color: white;
+    margin-bottom: 5%;
     -webkit-box-shadow: 0px 0px 30px 15px rgba(0,0,0,0.15);
     -moz-box-shadow: 0px 0px 30px 15px rgba(0,0,0,0.15);
     box-shadow: 0px 0px 30px 15px rgba(0,0,0,0.15);
   }
 
-h1 b {
-  color: #3dcaf2;
-}
+  h1 b {
+    color: #3dcaf2;
+  }
 
-footer {
-  margin:0;
-  background-color: whitesmoke;
-  text-align: center;
-  margin-top: 5%;
-  padding: 10px;
-  -webkit-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
-  box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
-}
+  footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin:0;
+    background-color: whitesmoke;
+    text-align: center;
+    padding: 10px;
+    -webkit-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .hidden{
+    display: none;
+  }
 
 </style>
+
 <script>
+
 $(document).ready(function() {
+  
+  let now = new Date();
+  let day = ("0" + now.getDate()).slice(-2);
+  let month = ("0" + (now.getMonth() + 1)).slice(-2);
+  let today = now.getFullYear()+"-"+(month)+"-"+(day);
+
+  $(".advancedSearchAnchor").click(()=>{
+    $(".advanced").toggleClass("hidden");
+  });
+
+  $("#hingga").val(today);
+
   $('#datatable').DataTable({
     "processing": true,
     "serverSide": true,
@@ -140,7 +179,20 @@ $(document).ready(function() {
     "ordering": false,
     "sDom":"tipr",
     "lengthChange": false,
-    "ajax": "{{ route('api.beritas.index') }}",
+    "ajax": {
+      'url': "{{ route('api.beritas.index') }}",
+      'data': function(data){
+          // Read values
+          let dari = $('#dari').val();
+          let hingga = $('#hingga').val();
+          let sumber = $('#sumberBerita').children("option:selected"). val();;
+
+          // Append to data
+          data.dari = dari;
+          data.sumber = sumber;
+          data.hingga = hingga;
+       }
+    },
     "pageLength": 5,
     "columns": [
       {
@@ -175,9 +227,14 @@ $(document).ready(function() {
     ]
   });
 
-  tabel = $('#datatable').DataTable();
+  let tabel = $('#datatable').DataTable();
+
   $('#searchKey').keyup(function(){
       tabel.search($(this).val()).draw() ;
+  });
+
+  $('#dari,#hingga,#sumberBerita').change(function(){
+    tabel.draw();
   });
 });
 </script>

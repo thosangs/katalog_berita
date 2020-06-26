@@ -16,11 +16,24 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        return view('berita');
+        function populateDropdown($sumber)
+        {
+            return
+            "<option value='".$sumber["sumber"]."'>".
+            $sumber["sumber"].
+            "</option>";
+        }
+        $listSumber = Berita::select('sumber')->groupBy('sumber')->get('sumber')->toArray();
+        $render = [];
+        foreach ($listSumber as $key => $sumber) {
+            array_push($render, populateDropdown($sumber));
+        }
+        return view('berita', compact('render'));
     }
 
-    public function getBeritas()
+    public function getBeritas(Request $request)
     {
+        $query = Berita::select('tag', 'sumber', 'tanggal', 'judul', 'link');
         function getIcon($sumber)
         {
             if ($sumber=="Kalteng.antaranews.com") {
@@ -72,8 +85,14 @@ class BeritaController extends Controller
             }
             return $hari_ini." ,".$waktu->format('d/M/Y');
         }
-        $query = Berita::select('tag', 'sumber', 'tanggal', 'judul', 'link')->orderBy('tanggal', 'DESC');
-        return datatables($query)
+        if (!empty($request->hingga)) {
+            $query = $query->whereBetween('tanggal', array($request->dari, $request->hingga));
+        }
+        if ($request->sumber!="*") {
+            $query = $query->where('sumber', $request->sumber);
+        }
+
+        return datatables($query->orderBy('tanggal', 'DESC'))
             ->editColumn('judul', function ($berita) {
                 return
                 '<p style="margin-bottom:0;"><img src="'.getIcon($berita->sumber).'" style="width:13px">'.$berita->tag.' :'.getDateFormat($berita->tanggal).'</p>'.
@@ -81,6 +100,19 @@ class BeritaController extends Controller
             })
             ->escapeColumns([])
             ->make(true);
+    }
+
+    public function dummy()
+    {
+        if (!empty($request->from_date)) {
+            $data = DB::table('tbl_order')
+         ->whereBetween('order_date', array($request->from_date, $request->to_date))
+         ->get();
+        } else {
+            $data = DB::table('tbl_order')
+         ->get();
+        }
+        return datatables()->of($data)->make(true);
     }
 
     /**
