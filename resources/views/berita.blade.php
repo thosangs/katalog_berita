@@ -241,6 +241,12 @@ $(document).ready(function() {
       tabel.search($(this).val()).draw() ;
   });
 
+  $('#searchKey').keypress(function(e){
+    if(e.which == 13){
+      $(this).blur();
+    }
+  });
+
   $('#dari,#hingga,#sumberBerita').change(function(){
     tabel.draw();
   });
