@@ -61,6 +61,7 @@ class BeritaController extends Controller
             if ($sumber=="Tabengan.com") {
                 return asset('tabengan.png');
             }
+            return $sumber.".png";
         }
         function getDateFormat($tanggal)
         {
