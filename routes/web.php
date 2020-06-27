@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'BeritaController@index');
+Route::get('/', 'BeritaController@index')->name('home');
 
 Route::resource('berita', 'BeritaController');

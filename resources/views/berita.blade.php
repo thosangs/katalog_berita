@@ -6,7 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="icon" href="{{ asset('favicon.svg') }}" />
+
   <title>Aktris - Aplikasi Katalog Berita Statistik</title>
+
+  <meta property=”og:title” content='Aktris - Aplikasi Katalog Berita Statistik' />
+  <meta property=”og:url” content=”{{ route('home') }}” />
+  <meta property=”og:type” content=”website” />
+  <meta property=”og:description” content='Aplikasi sederhana hasil iseng-iseng berhadiah Penampil Berita Kalteng yang berhasil si-crawl oleh Kofax Kapow yang update setiap hari 😁' />
+  <meta property=”og:image” content=”{{ asset('favicon.svg') }}” />
 
   <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
