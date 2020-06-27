@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'BeritaController@index')->name('home');
+Route::get('/redir/{id}', 'BeritaController@redir')->name('redir');
 
 Route::resource('berita', 'BeritaController');

@@ -31,9 +31,25 @@ class BeritaController extends Controller
         return view('berita', compact('render'));
     }
 
+    /**
+     * Mendapatkan jumlah klik berita.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redir(Request $req)
+    {
+        DB::table('berita')->where('id', $req->id)->increment('click');
+        return redirect(DB::table('berita')->select('link')->where('id', $req->id)->first()->link);
+    }
+
+    /**
+     * Mengelola requestd dari AJAX datatable front-end.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function getBeritas(Request $request)
     {
-        $query = Berita::select('tag', 'sumber', 'tanggal', 'judul', 'link');
+        $query = Berita::select('id', 'tag', 'sumber', 'tanggal', 'judul', 'link');
         function getIcon($sumber)
         {
             if ($sumber=="Kalteng.antaranews.com") {
@@ -96,23 +112,10 @@ class BeritaController extends Controller
             ->editColumn('judul', function ($berita) {
                 return
                 '<p style="margin-bottom:0;"><img src="'.getIcon($berita->sumber).'" style="width:13px">'.$berita->tag.' :'.getDateFormat($berita->tanggal).'</p>'.
-                '<a style="font-weight:650;text-decoration:none;color:black;" href="'.$berita->link.'"  target="_blank"> '.$berita->judul.' </a>';
+                '<a style="font-weight:650;text-decoration:none;color:black;" href="'.route('redir', $berita->id).'"  target="_blank"> '.$berita->judul.' </a>';
             })
             ->escapeColumns([])
             ->make(true);
-    }
-
-    public function dummy()
-    {
-        if (!empty($request->from_date)) {
-            $data = DB::table('tbl_order')
-         ->whereBetween('order_date', array($request->from_date, $request->to_date))
-         ->get();
-        } else {
-            $data = DB::table('tbl_order')
-         ->get();
-        }
-        return datatables()->of($data)->make(true);
     }
 
     /**
