@@ -187,6 +187,10 @@ $(document).ready(function() {
     "ordering": false,
     "sDom":"tipr",
     "lengthChange": false,
+    "language": {
+      "info": "_START_ sd _END_ dari _TOTAL_ berita",
+      "infoFiltered": " - dari _MAX_"
+    }
     "ajax": {
       'url': "{{ route('api.beritas.index') }}",
       'data': function(data){

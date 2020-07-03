@@ -116,6 +116,7 @@ class BeritaController extends Controller
                 '<a style="font-weight:650;text-decoration:none;color:black;" href="'.route('redir', $berita->id).'"  target="_blank"> '.$berita->judul.' </a>';
             })
             ->escapeColumns([])
+            ->rawColumns(['judul'])
             ->make(true);
     }
 
