@@ -29,10 +29,10 @@ class CreateBeritasTable extends Migration
      */
     public function down()
     {
-        Schema::table('berita', function (Blueprint $table) {
-            $table->dropColumn('id');
-            $table->dropColumn('click');
-        });
+        //Schema::table('berita', function (Blueprint $table) {
+        //    $table->dropColumn('id');
+        //    $table->dropColumn('click');
+        //});
         DB::statement("ALTER TABLE berita DROP INDEX search");
         // Schema::dropIfExists('berita');
     }
