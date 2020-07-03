@@ -181,60 +181,60 @@ $(document).ready(function() {
   $("#hingga").val(today);
 
   $('#datatable').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "pagingType": 'simple',
-    "ordering": false,
-    "sDom":"tipr",
-    "lengthChange": false,
-    "language": {
-      "info": "_START_ sd _END_ dari _TOTAL_ berita",
-      "infoFiltered": " - dari _MAX_"
-    }
-    "ajax": {
-      'url': "{{ route('api.beritas.index') }}",
-      'data': function(data){
+    processing: true,
+    serverSide: true,
+    pagingType: 'simple',
+    ordering: false,
+    sDom:"tipr",
+    lengthChange: false,
+    language: {
+      info: "_START_ sd _END_ dari _TOTAL_ berita",
+      infoFiltered: " - dari _MAX_"
+    },
+    ajax: {
+      url: "{{ route('api.beritas.index') }}",
+      data: function(data){
           // Read values
           let dari = $('#dari').val();
           let hingga = $('#hingga').val();
           let sumber = $('#sumberBerita').children("option:selected"). val();;
-
+          
           // Append to data
           data.dari = dari;
           data.sumber = sumber;
           data.hingga = hingga;
        }
     },
-    "pageLength": 5,
-    "columns": [
+    pageLength: 5,
+    columns: [
       {
-        "data": "sumber"
+        data: "sumber"
       },
       {
-        "data": "tanggal"
+        data: "tanggal"
       },
       {
-        "data": "link"
+        data: "link"
       },
       {
-        "data": "judul"
+        data: "judul"
       },
       {
-        "data": "tag"
+        data: "tag"
       }
     ],
-    "columnDefs": [
+    columnDefs: [
       {
-        "render": function(data, type, row) {
+        render: function(data, type, row) {
           return data.substring(0, 10);
         },
-        "targets": 1
+        targets: 1
       },{
-        "type": "html",
-        "targets": [4] 
+        type: "html",
+        targets: [4] 
       },{
-        "visible": false,
-        "targets": [0,1,2,4]
+        visible: false,
+        targets: [0,1,2,4]
       }
     ]
   });
