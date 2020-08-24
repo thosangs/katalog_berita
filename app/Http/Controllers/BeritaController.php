@@ -61,6 +61,18 @@ class BeritaController extends Controller
             if ($sumber=="Tabengan.com") {
                 return asset('tabengan.png');
             }
+            if ($sumber=="Kaltengekspres.com") {
+                return asset('kaltengekspres.PNG');
+            }
+            if ($sumber=="Gerakkalteng.com") {
+                return asset('gerakkalteng.png');
+            }
+            if ($sumber=="Katadata.co.id") {
+                return asset('katadata.png');
+            }
+            if ($sumber=="Radar-kalteng.com") {
+                return asset('radarkalteng.png');
+            }
             return $sumber.".png";
         }
         function getDateFormat($tanggal)
