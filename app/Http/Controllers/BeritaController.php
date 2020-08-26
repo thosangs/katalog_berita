@@ -77,7 +77,7 @@ class BeritaController extends Controller
         }
         function getDateFormat($tanggal)
         {
-            $waktu= Carbon::parse(substr($tanggal, 0, 10));
+            $waktu= Carbon::parse(substr($tanggal, 0, 10))->addDay();
 
             switch ($waktu->format('D')) {
                 case 'Sun':
