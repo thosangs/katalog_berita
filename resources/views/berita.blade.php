@@ -185,7 +185,14 @@
   let now = new Date();
   let day = ("0" + now.getDate()).slice(-2);
   let month = ("0" + (now.getMonth() + 1)).slice(-2);
-  let today = now.getFullYear()+"-"+(month)+"-"+(day);
+	let today = now.getFullYear()+"-"+(month)+"-"+(day);
+	function tomorowDate(d) {
+		let date = new Date(d);
+		date.setDate(date.getDate() - 1)
+		let dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit' });
+		let [{ value: month },,{ value: day },,{ value: year }] = dateTimeFormat .formatToParts(date);
+		return (`${day}-${month}-${year }`);
+	}
 
   $(".advancedSearchAnchor").click(()=>{
     $(".advanced").toggleClass("hidden");
@@ -208,8 +215,8 @@
       url: "{{ route('api.beritas.index') }}",
       data: function(data){
           // Read values
-          let dari = $('#dari').val();
-          let hingga = $('#hingga').val();
+          let dari = tomorowDate($('#dari').val());
+          let hingga = tomorowDate($('#hingga').val());
           let sumber = $('#sumberBerita').children("option:selected"). val();;
           
           // Append to data
