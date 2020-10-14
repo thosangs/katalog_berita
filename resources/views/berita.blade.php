@@ -136,10 +136,6 @@
 		transition: all ease 0.2s;
 	}
 
-	.advancedSearchAnchor:hover {
-		color: black;
-		font-weight: 400;
-	}
 
 	body {
 		background-color: rgb(216, 255, 252);
